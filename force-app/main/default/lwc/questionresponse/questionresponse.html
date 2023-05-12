@@ -1,0 +1,425 @@
+<template>
+  <template if:true={Cards}>
+    <c-child-component-infos lead-name='{interviewLead}' interview-date='{interviewDate}' interviewer-name='{interviewerName}' interviewer-title='{interviewerTitle}' interview-lead-id={interviewLeadId}> </c-child-component-infos>
+  </template>
+  <template if:true={Evaluations}>
+    <div class="global">
+        <div class="ag-courses_box" >
+            <template for:each={pannes} for:item="panne">
+            <div class="ag-courses_item" key={panne}>
+            <div class="ag-courses-item_link" onclick={handleCardClick} data-evaluationid={panne.Id}  data-date={panne.Date__c} data-lead={panne.Lead__r.Name} data-title={panne.AssignedTo__r.Title} data-leadid={panne.Lead__c} data-interviewer={panne.AssignedTo__r.Name} data-interviewerid={panne.AssignedTo__r.Id}>
+                <div class="ag-courses-item_bg"></div>
+                <div class="ag-courses-item_title">
+                <p class="white-hovered">{panne.Name}</p>
+                </div>
+                <div class="ag-courses-item_title">
+                <p  class="LeadName"> {panne.Lead__r.Name}</p>
+                </div>
+                <div class="ag-courses-item_date-box">
+                Start :
+                <span class="ag-courses-item_date" >
+                    {panne.Date__c}
+                </span>
+                </div>
+            </div>
+            </div>
+        </template>  
+        </div>
+    </div>
+  </template>
+  <template if:false={Evaluations}>
+    <template if:true={filterchoice}>
+      <div class="global">
+        <div class="lien-container"><div class='lien'>Home / </div></div>
+        <div class="image">
+            <image  class="boderimage" src={imageback} alt="background image"/>
+        </div>
+        <div class="container">
+           
+          <div class="button1" onclick={handlebuttonfilter}>Filter Questions</div>
+          <div class="button1" onclick={handlebuttonbundle}>Choose a Bundle</div>
+        </div>
+      </div>
+    </template>
+    <template if:false={filterchoice}>
+      <template lwc:if={avaiblechoice}>
+        <template if:true={sectionVisibility}>
+          <div class="global">
+              <div class="lien-container"><div class='lien' onclick={handleBackToHome}>Home / Sections </div></div>
+              <div class="cards-container" >
+                  <template for:each={rows} for:item="row">
+                      <div class="card" key={row.value} >
+                          <div class="card-content" data-section={row.value} onclick={handleClick}>
+                              <div class="cardavatar">
+                                  <p class="afteravatar">{row.firstletter}</p>
+                              </div>
+                              <div class="card-text">
+                                  <h2 class="card-heading">
+                                      {row.value} 
+                                  </h2>
+                              </div>
+                          </div>
+                      </div>
+                  </template>
+              </div>  
+          </div>
+          
+        </template>
+        <template if:false={sectionVisibility}>
+            <template if:true={technical}>
+                <template if:true={cards}>
+                    <div class="global">
+                        <div class="lien-container"><div class='lien' onclick={handlebacktosection}>Home / Sections / Technical </div></div>
+                        <div class="cards-container" >
+                            <template for:each={rows2} for:item="row2">
+                                <div class="card" key={row2.value}>
+                                    <div class="card-content" data-key={row2.value} onclick={handleClick2}>
+                                        <div class="cardavatar">
+                                            <p class="afteravatar">{row2.firstletter2}</p>
+                                        </div>
+                                        <div class="card-text">
+                                            <h2 class="card-heading">
+                                                {row2.value}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>  
+                    </div>    
+                </template>
+                <template if:false={cards}>
+                    <template if:false={bundleVisibility}>
+                        <div class="global">
+                            <div class="lien-container"> <div class='lien' onclick={handlebacktosubsection}>Home / Sections / Technical / {selectedSection}</div></div>
+                            <div class="BigContainer">
+                                <div class="subsectionName">
+                                    <p>{selectedSection}</p>
+                                </div>
+                                <br>
+                                <div class="filter">
+                                    <div class="filtredby"> Filtred by :</div>
+                                    <div class="filterelement">
+                                        <input type="checkbox" class="inputat" name="level" value="Easy" onchange={handleLevelChange}>
+                                        <label  class='labels' for="easy">Easy</label>
+                                    </div>
+                                    <div class="filterelement">
+                                        <input type="checkbox" class="inputat" name="level" value="Medium" onchange={handleLevelChange}>
+                                        <label  class='labels' for= "medium">Medium</label>
+                                    </div>
+                                    <div class="filterelement">
+                                        <input type="checkbox" class="inputat" name="level" value="Hard" onchange={handleLevelChange}>
+                                        <label  class='labels' for="hard">Hard</label>
+                                    </div>
+                                    <div class="inbetween"></div>
+                                    <div>
+                                        <div class="filterelement">
+                                            <input class="inputat" type="radio" name="filtertype" value="All" onchange={handleTypeChange}>
+                                            <label class='labels' for="All">All</label>
+                                        </div>
+                                        <div class="filterelement">
+                                            <input class="inputat" type="radio" name="filtertype" value="Single response" onchange={handleTypeChange}>
+                                            <label class='labels' for="Single response">Single response</label>
+                                        </div>
+                                        <div class="filterelement">
+                                            <input class="inputat" type="radio" name="filtertype" value="Multiple response" onchange={handleTypeChange}>
+                                            <label class='labels' for="Multiple response">Multiple response</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="divquestion">    
+                                        <template if:false={isEmpty}>
+                                            <template for:each={finalQuestions} for:item="questionsub">
+                                                <div class="questioncontainer" data-index={index} key={question}>
+                                                    <div class="circle"><p class="plus">+</p></div>
+                                                    <div>
+                                                        <p class="textquestion">{questionsub.Name}</p>
+                                                        <p class="thelevel">{questionsub.Level__c}</p>
+                                                    </div>
+                                                    <input type="checkbox" data-answer={questionsub.Answer__c} data-questionname={questionsub.Id} data-id={questionsub.Name} class="checkbox" onchange={handlebubble}>
+                                                </div>
+                                            </template>    
+                                        </template>
+                                        <template if:true={isEmpty}>
+                                            <div class="containerimage">
+                                                <img class="nofoundimage" src={notFoundImage} alt="Your Image">
+                                            </div>
+                                        </template>
+                                </div>
+                                <div class="question-mark" onclick={handleselectedquestions}>?</div>
+                    
+                                <template if:true={items}>
+                                    <div class="items">
+                                        <div class="titlebubble">
+                                            <div>Selected questions</div>
+                                        </div>
+                                        <div class="select">
+                                            <template for:each={selectedItems} for:item="item">
+                                                <div class="bubblequestion" key={item} data-delete={item.Name}>
+                                                    <p style="display: inline-block;">{item.Name}</p>
+                                                    <p style="display: inline-block;" onclick={handledelete}>X</p>
+                                                </div>
+                                            </template>
+                                        </div>    
+                                        <button class="start-exam-btn" onclick={handlebundlevisibility}>Start exam</button>
+                                    </div>
+                                </template>   
+                            </div> 
+                        </div>    
+                    </template>
+                    <template if:true={bundleVisibility}>
+                        <div class="global">
+                            <div class="lien-container"><div class='lien' onclick={handlebacktoquestions}>Home / Sections / Technical / {selectedSection} / New bundle</div></div> 
+                            <div class="BigContainer">
+                                <div class="divquestioN">    
+                                    <lightning-icon icon-name="utility:edit" ></lightning-icon>
+                                    <input type="text" class="no-outline" placeholder="New bundle"></input>
+                                    <template for:each={selectedItems} for:item="item">
+                                        <div class="questionCon" data-index={index} key={question}>
+                                            <div class="questionque">
+                                                <div class="circle" data-name={item.Name} onclick={handleCircleClick}><p class="plus">+</p></div>
+                                                <div class="textquestion">{item.Name}</div>
+                                            </div>
+                                                <template if:true={item.Selected}>
+                                                    <div class="showresponse">
+                                                        <div class="circleshow" data-quest={item.Name} onclick={handleShowResponse}><p class="plusselec">+</p></div>
+                                                        <div class="textshow">show response :</div>
+                                                    </div>    
+
+                                                        <template if:true={item.SelectedAnswer}>
+                                                            <div class="response">{item.Answer}</div>
+                                                        </template>
+                                                    
+                                                    <div class="inputcontents">
+                                                        <div class="label1">
+                                                            <label class="labels"> Comments : </label>
+                                                            <textarea class="left" data-name={item.Name} oninput={handleTextAreaChange} value={comment}></textarea>
+                                                        </div>
+                                                        <div class="label2">
+                                                            <label class="labels" > Mark : </label>
+                                                            <input class="right" type="Number" min="0" max="10" data-name={item.Name} value={item.Mark} onchange={handleMarkChange}>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                         </div>
+                                    </template>   
+                                </div>
+                                <div class="buttonContainer">
+                                  <button type="submit" onclick={handleSubmit} class="end-exam-btn">End of Exam</button>
+                                </div>
+                            </div>
+                            <template if:true={isModalOpen}>
+                                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                    <div class="slds-modal__container">
+                                        <header class="slds-modal__header">
+                                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                                                <lightning-icon icon-name="utility:close"
+                                                    alternative-text="close"
+                                                    variant="inverse"
+                                                    size="small" ></lightning-icon>
+                                                <span class="slds-assistive-text">Close</span>
+                                            </button>
+                                            <h2 class="modal-heading-01 slds-text-heading_medium slds-hyphenate">
+                                                <lightning-icon icon-name="Custom:custom53" ></lightning-icon>
+                                                Bundle usability
+                                            </h2>
+                                        </header>
+                                        <div class="slds-modal__content slds-p-around_medium modal-content-id-1">
+                                            <p class="bundlelabl"><b class="bundlelabl">Do you want to save this bundle you have just created to use it for another time ?
+                                            </b></p>
+                                            <br>
+                                            <div class="budlesave">
+                                                <div class="insidebundle" style="display: flex;justify-content: space-evenly;margin-top: 20px;">
+                                                    <label class="bundlelabl">Bundle Name : </label>
+                                                    <input type="text"  placeholder="..." oninput={handleBundleName}>
+                                                </div>
+                                                <div class="insidebundle" style="display: flex;justify-content: space-evenly;margin-top: 20px;">
+                                                    <label class="bundlelabl">Bundle description : </label>
+                                                    <textarea class="bundleArea"  placeholder="Enter description here ..." oninput={handleBundleDesc}></textarea>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        <footer class="slds-modal__footer">
+                                            <button class="slds-button slds-button_neutral" onclick={doNotSaveBundle} title="NO">NO</button>
+                                            <button class="slds-button slds-button_brand" onclick={doSaveBundle} title="YES">YES</button>
+                                        </footer>
+                                    </div>
+                                </section>
+                                <div class="slds-backdrop slds-backdrop_open"></div>
+                            </template>        
+                        </div>    
+                    </template>
+      
+                </template>    
+            </template> 
+            <template if:false={technical}>   
+                <template if:false={bundleVisibility}>
+                    <div class="global">
+                        <div class="lien-container"><div class='lien' onclick={handlebacktosectionfr}>Home / Sections / {section}</div></div>  
+                        <div class="BigContainer">
+                            <div class="subsectionName">
+                                {section}
+                            </div>
+                            <br>
+                            <div class="filter">
+                                <div class="filtredby"> Filtred by :</div>
+                                <div>
+                                    <div class="filterelement">
+                                        <input class="inputat" type="checkbox" name="level" value="Easy" onchange={handleLevelSectionChange}>
+                                        <label class='labels' for="easy">Easy</label>
+                                    </div>
+                                    <div class="filterelement">
+                                        <input class="inputat" type="checkbox" name="level" value="Medium" onchange={handleLevelSectionChange}>
+                                        <label  class='labels' for="medium">Medium</label>
+                                    </div>
+                                    <div class="filterelement">
+                                        <input class="inputat" type="checkbox" name="level" value="Hard" onchange={handleLevelSectionChange}>
+                                        <label  class='labels' for="hard">Hard</label>
+                                    </div>
+                                </div>                        
+                                <div class="inbetween"></div>
+                                <div>
+                                    <div class="filterelement">
+                                        <input class="inputat" type="radio" name="filtertype" value="All" onchange={handleTypeSectionChange}>
+                                        <label class='labels' for="All">All</label>
+                                    </div>
+                                    <div class="filterelement">
+                                        <input class="inputat" type="radio"  name="filtertype" value="Single response" onchange={handleTypeSectionChange}>
+                                        <label class='labels' for="Single response">Single response</label>
+                                    </div>
+                                    <div class="filterelement">
+                                        <input class="inputat" type="radio" name="filtertype" value="Multiple response" onchange={handleTypeSectionChange}>
+                                        <label class='labels' for="Multiple response">Multiple response</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="divquestion">    
+                                <template if:false={isEmptysection}>
+                                    <template for:each={finalQuestionsSection} for:item="question">
+                                        <div class="questioncontainer" data-index={index} key={question}>
+                                            <div class="circle"><p class="plus">+</p></div>
+                                            <div>
+                                                <p class="textquestion">{question.Name}</p>
+                                                <p class="thelevel">{question.Level__c}</p>
+                                            </div>
+                                            <input type="checkbox"  data-questionname={question.Id} data-id={question.Name} data-answer={question.Answer__c} class="checkbox" onchange={handlebubble}>
+                                        </div>
+                                    </template>    
+                                </template>
+                                <template if:true={isEmptysection}>
+                                    <div class="containerimage">
+                                        <img class="nofoundimage" src={notFoundImage} alt="Your Image">
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="question-mark" onclick={handleselectedquestions}>?</div>
+                            <template if:true={items}>
+                                <div class="items">
+                                    <div class="titlebubble">
+                                        <div>Selected questions</div>
+                                    </div>
+                                    <div class="select">
+                                        <template for:each={selectedItems} for:item="item">
+                                            <div class="bubblequestion" key={item} data-delete={item.Name}>
+                                                <p style="display: inline-block;">{item.Name}</p>
+                                                <p style="display: inline-block;" onclick={handledelete}>X</p>
+                                            </div>
+                                        </template>
+                                    </div>    
+                                    <button class="start-exam-btn" onclick={handlebundlevisibility}>Start exam</button>
+                                </div>
+                            </template>  
+                        </div>      
+                    </div>    
+                </template>
+                <template if:true={bundleVisibility}>
+                    <div class="global">
+                        <div class="lien-container"><div class='lien' onclick={handlebacktoquestions}>Home / Sections / {section} / New bundle</div></div>
+                        <div class="BigContainer">
+                            <div class="divquestioN">    
+                                <lightning-icon icon-name="utility:edit" ></lightning-icon>
+                                <input type="text" class="no-outline" placeholder="New bundle"></input>
+                                <template for:each={selectedItems} for:item="item">
+                                    <div class="questionCon" data-index={index} key={question}>
+                                        <div class="questionque">
+                                            <div class="circle" data-name={item.Name} onclick={handleCircleClick}><p class="plus">+</p></div>
+                                            <div class="textquestion">{item.Name}</div>
+                                        </div>
+                                            <template if:true={item.Selected}>
+                                                <div class="showresponse">
+                                                    <div class="circleshow" data-quest={item.Name} onclick={handleShowResponse}><p class="plusselec">+</p></div>
+                                                    <div class="textshow">show response :</div>
+                                                </div>    
+
+                                                    <template if:true={item.SelectedAnswer}>
+                                                        <div class="response">{item.Answer}</div>
+                                                    </template>
+                                                
+                                                <div class="inputcontents">
+                                                    <div class="label1">
+                                                        <label class="labels"> Comments : </label>
+                                                        <textarea class="left" data-name={item.Name} oninput={handleTextAreaChange} value={comment}></textarea>
+                                                    </div>
+                                                    <div class="label2">
+                                                        <label class="labels" > Mark : </label>
+                                                        <input class="right" type="Number" min="0" max="10" data-name={item.Name} value={item.Mark} onchange={handleMarkChange}>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                     </div>
+                                </template>   
+                            </div>
+                            <div class="buttonContainer">
+                              <button onclick={handleSubmit} class="end-exam-btn">End of Exam</button>
+                            </div>
+                        </div>
+                        <template if:true={isModalOpen}>
+                            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                <div class="slds-modal__container">
+                                    <header class="slds-modal__header">
+                                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={doNotSaveBundle}>
+                                            <lightning-icon icon-name="utility:close"
+                                                alternative-text="close"
+                                                variant="inverse"
+                                                size="small" ></lightning-icon>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                        <h2 class="modal-heading-01 slds-text-heading_medium slds-hyphenate">
+                                            <lightning-icon icon-name="Custom:custom53" ></lightning-icon>
+                                            Bundle usability
+                                        </h2>                   
+                                    </header>
+                                    <div class="slds-modal__content slds-p-around_medium modal-content-id-1">
+                                        <p class="bundlelabl"><b class="bundlelabl">Do you want to save this bundle you have just created to use it for another time ?
+                                        </b></p>
+                                        <br>
+                                        <div class="budlesave">
+                                            <div class="insidebundle">
+                                                <label class="bundlelabl">Bundle Name : </label>
+                                                <input type="text"  placeholder="..." oninput={handleBundleName}>
+                                            </div>
+                                            <div class="insidebundle">
+                                                <label class="bundlelabl">Bundle description : </label>
+                                                <textarea class="bundleArea"  placeholder="Enter description here ..." oninput={handleBundleDesc}></textarea>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    <footer class="slds-modal__footer">
+                                        <button class="slds-button slds-button_neutral" onclick={doNotSaveBundle} title="NO">NO</button>
+                                        <button class="slds-button slds-button_brand" onclick={doSaveBundle} title="YES">YES</button>
+                                    </footer>
+                                </div>
+                            </section>
+                            <div class="slds-backdrop slds-backdrop_open"></div>
+                        </template>
+                    </div>    
+                </template>
+            </template>  
+        </template>
+      </template>
+      <template lwc:else>
+        <c-bundle></c-bundle>
+      </template>
+    </template>
+  </template>  
+</template>

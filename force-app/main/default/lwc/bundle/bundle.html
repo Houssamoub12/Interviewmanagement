@@ -1,0 +1,66 @@
+<template>
+    <template lwc:if={Existingbundle}>
+        <div class="global">    
+            <div class="lien-container"><div class='lien' onclick={handleBackToHome}>Home / My bundles </div></div>
+            <div class="ag-container">
+              <div class="search-bar-list">
+                  <input type="text" placeholder="Search..." oninput={handleSearch}>
+              </div>
+              <div class="ag-box">
+                  <template for:each={displayedBundleList} for:item="bundle">
+                       <div class="ag-item" key={bundle.Id} onclick={handleBundleQuestionsVisibility} data-playlistid={bundle.Id} data-playlistname={bundle.Name} >
+                          <div class="ag-link">
+                              <div class="ag-item_bg" ></div>
+                              <div class="ag-title">
+                                 <p class="white-hovered">{bundle.Name}</p>
+                              </div>
+                          </div>
+                      </div>
+                  </template>
+              </div>
+            </div>
+        </div>
+    </template>
+    <template lwc:else>
+        <div class="global">    
+            <div class="lien-container"><div class='lien' onclick={handleBackchoosebundle}>Home / My bundles / {playlistName} </div></div>
+            <div class="BigContainer">
+                <div class="divquestioN">    
+                    <div class="subsectionName">
+                        <p>{playlistName}</p>
+                    </div>                   
+                    <template for:each={selectedItems} for:item="item">
+                        <div class="questionCon" data-index={index} key={question}>
+                            <div class="questionque">
+                                <div class="circle" data-name={item.Name} onclick={handleCircleClick}><p class="plus">+</p></div>
+                                <div class="textquestion">{item.Name}</div>
+                            </div>
+                                <template if:true={item.Selected}>
+                                    <div class="showresponse">
+                                        <div class="circleshow" data-quest={item.Name} onclick={handleShowResponse}><p class="plusselec">+</p></div>
+                                        <div class="textshow">show response :</div>
+                                    </div>    
+                                        <template if:true={item.SelectedAnswer}>
+                                            <div class="response">{item.Answer}</div>
+                                        </template>
+                                    <div class="inputcontents">
+                                        <div class="label1">
+                                            <label class="labels"> Comments : </label>
+                                            <textarea class="left" data-name={item.Name} oninput={handleTextAreaChange} value={comment}></textarea>
+                                        </div>
+                                        <div class="label2">
+                                            <label class="labels" > Mark : </label>
+                                            <input class="right" type="Number" min="0" max="10" data-name={item.Name} value={item.Mark} onchange={handleMarkChange}>
+                                        </div>
+                                    </div>
+                                </template>
+                         </div>
+                    </template>   
+                </div>
+                <div class="buttonContainer">
+                  <button onclick={handleSubmit} class="end-exam-btn">End of Exam</button>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

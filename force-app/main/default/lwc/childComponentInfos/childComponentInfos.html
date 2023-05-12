@@ -1,0 +1,30 @@
+<template>
+    <div class="container">
+        <div class="interviewer-name">
+          <div class="image_outer_container">
+            <div class="green_icon"></div>
+            <div class="image_inner_container">
+              <!-- <img src="https://picsum.photos/200"> -->
+              <img src={pfimage}>
+            </div>
+          </div>
+          <p class="interviewer-namevar">{interviewerName}</p>
+          <p class="interviewer-title">{interviewerTitle}</p>
+        </div>
+        <div class="footer-section">
+          <div class="label-info-container">
+            <label class="label">User Name :</label>
+            <p class="info">{leadName}</p>
+          </div>
+          <div class="label-info-container">
+            <label class="label">Target Job :</label>
+            <p class="info">{job}</p>
+          </div>
+          <div class="label-info-container">
+            <label class="label">Date Interview :</label>
+            <p class="info">{interviewDate}</p>
+          </div>
+        </div>
+      </div>
+      
+</template>
